@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<title  id="pageTitle">Yanapaq - Results of </title>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.5/fuse.min.js"></script>
+
+		<link rel="stylesheet" href="yanapaq-search.css">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:300,600,700" rel="stylesheet">
+		<meta name="robots" content="index,follow">
+		<link rel="icon" href="/wp-content/uploads/2019/11/favicon.png.png" sizes="32x32">
+		<link rel="icon" href="wp-content/uploads/2019/11/favicon.png.png" sizes="192x192">
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-139064897-1"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		
+		  gtag('config', 'UA-139064897-1');
+		</script>
+  	</head>
+  	<body>
+		<div id="light-box" style="display:none">
+			<div class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+				<h3>Yanapaq</h3>
+			</div>
+		</div>
+	  	<div class="header">
+		  	<a href="../en/" class="previous">&#8249;</a>
+		  	<form action="results-en.htm">
+		  		<input type="text" name="search" placeholder="Search by topic or SDG" id="keyWord">
+			</form>
+		  	<a href="../en/"><span id="yanapaqLogo"></span></a>
+	  	</div>
+	  	<div class="content">
+		  	<div id="filtHeader">
+			  	<a id="showFilt" class="primaryButton" onclick="showFilt()">View Filters</a>
+			  	<a id="hideFilt" class="primaryButton" onclick="hideFilt()" style="display:none">Hide Filters</a>
+		  	</div>
+
+		  	<div id="filters">
+				<form>
+					<div id="topicParentF">Filter by Topics </div>
+					<ul class="search-facets" id="filtTopics">
+						<li>
+							<span>
+								<input type="checkbox" id="cbTopicAll" name="cbTopicAll" value="cbTopicAll" onchange="runFilterT('cbTopicAll')" checked>
+							</span>
+							<span class="facet-title">
+								<label for="cbTopicAll">All the topics</label>
+							</span>
+						</li>
+				  	</ul>
+					<div id="odsParentF">Filter by SDG </div>
+					<ul class="search-facets" id="filtOds">
+						<li>
+							<span>
+								<input type="checkbox" id="cbOdsAll" name="cbOdsAll" value="cbOdsAll" onchange="runFilterO('cbOdsAll')" checked>
+							</span>
+							<span class="facet-title">
+								<label for="cbOdsAll">All the SDG</label>
+							</span>
+						</li>
+				  	</ul>
+					<div id="sesParentF">Filter by sessions </div>
+					<ul class="search-facets2 bottom-facet" id="filtSes">
+						<li>
+							<span>
+								<input type="radio" id="cbSesAll" name="cbSesAll" value="cbSesAll" onchange="runFilterS('cbSesAll')" checked>
+							</span>
+							<span class="facet-title">
+								<label for="cbSesAll">All the sessions</label>
+							</span>
+						</li>
+				  	</ul>
+				</form>	
+		  	</div>
+		  	<div id="div-results" style="display:none">
+			  	<h1 id="titlResult">Results of '</h1>
+			  	<p id="numFoundTit">
+				  	<span id="recomFound">
+				  		<span id="numFound"></span> Recommendation(s) found
+					  	</span>
+				  	</span>
+				  	<span id="orderCombo">Ordered by:
+				  		<select id="orderSelect" onchange="orderResults()">
+							<option value="relev" selected>More relevant</option>
+							<option value="desc">Newest</option>
+							<option value="asc">Oldest</option>
+						</select> 
+				  	</span>
+				</p>
+			  	<div id="empty-state" style="display:none">
+				  	<div>
+						<img src="images/no-results.png">
+						<h1>No recommendations found</h1>
+						<h3>Adjust your search keyword of filter</h3>
+				  	</div>
+				</div>
+			  	<div id="resultList"></div>
+		  	</div>
+		  	<a id="focusButton" style="display:none" href="javascript:void(0);" onclick="intoMSword()">Download results (.doc)</a>
+			<script type="text/javascript" src="yanapaq-search-en.js"></script>
+		</div>
+		<script>
+			// get keyword from url
+			var keyWord = new URLSearchParams(location.search); //locate variable
+			var keyWord = keyWord.get('search'); //recover value from variable and declare global
+			// insert in search field box
+			document.getElementById("keyWord").value = keyWord;
+			document.getElementById("keyWord").focus();
+			document.getElementById("keyWord").blur();
+			
+			//fetch data, load global variables and load search function
+			fetchApis()
+				.then(response => data = response)
+				.then(response => { recommends = response[0]; //global variable
+									api_status = response[1]; //global variable
+									api_topic = response[2]; //global variable
+									api_ods = response[3]; 
+									api_session = response[6]}) //global variable
+				.then(response => { results = searchRecom(); //load search function
+									results_relev = results; 
+									resultsCaller(); });
+		</script>
+	</body>
+</html>

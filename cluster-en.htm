@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.5/fuse.min.js"></script>
+		<link rel="stylesheet" href="yanapaq-search.css">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:300,600,700" rel="stylesheet">
+		<meta name="robots" content="index,follow">
+		<link rel="icon" href="/wp-content/uploads/2019/11/favicon.png.png" sizes="32x32">
+		<link rel="icon" href="wp-content/uploads/2019/11/favicon.png.png" sizes="192x192">
+		<title id="pageTitle"></title>
+		
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-139064897-1"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		
+		  gtag('config', 'UA-139064897-1');
+		</script>
+  	</head>
+  	<body>
+  		<div id="light-box" style="display:none">
+			<div class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+				<h3>Yanapaq</h3>
+			</div>
+		</div>
+	  	<div class="header">
+		  	<a href="../en/" class="previous">&#8249;</a>
+		  	<form action="results-en.htm">
+		  		<input type="text" name="search" placeholder="Search by topic or SDG" id="keyWord">
+			</form>
+		  	<a href="../en/	"><span id="yanapaqLogo"></span></a>
+	  	</div>
+		<div id="cluster" style="left:0">
+			<h1 id="titlResult"></h1>
+			<h2 id="subTitResult"></h2>
+			<p id="numFoundTit"><span id="numFound"></span> Recommendation(s)</p>
+			<div id="resultList"></div>
+		</div>
+		<a id="focusButton" href="javascript:void(0);" onclick="intoMSwordC()">Download recommendations (.doc)</a>
+		<script type="text/javascript" src="yanapaq-search-en.js"></script>
+	  	<script>
+			// get keyword from localStorage
+			var keyWord = window.localStorage.getItem('kw');
+			// insert in search field box
+			document.getElementById("keyWord").value = keyWord;
+			document.getElementById("keyWord").focus();
+			document.getElementById("keyWord").blur();
+			
+			//fetch data, load global variables and load search function
+			fetchApis()
+				.then(response => data = response)
+				.then(response => { recommends = response[0]; //global variable
+									api_status = response[1]; //global variable
+									api_topic = response[2]; //global variable
+									api_ods = response[3]; 
+									api_target = response[4];
+									api_workspace = response[5]}) //global variable
+				.then(response => { listCluster(); }); //global variable
+				  	
+		</script>
+  	</body>
+</html>
